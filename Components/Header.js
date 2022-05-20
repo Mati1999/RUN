@@ -12,7 +12,7 @@ const Header = ({ title = 'E-Commerce' }) => {
 
 export default Header
 
-const styles = StyleSheet.create({
+const styles = {
     container: {
         backgroundColor: colors.darkBlue,
         height: 80,
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'LatoRegular',
     }
-})
+}

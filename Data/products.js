@@ -55,9 +55,16 @@ export const PRODUCTS = [
         price: 29.99
     },
     {
-        id: 8,
+        id: 9,
         category: 1,
-        description: 'Producto 8',
+        description: 'Producto 9',
+        img: 'https://picsum.photos/200/300',
+        price: 29.99
+    },
+    {
+        id: 10,
+        category: 1,
+        description: 'Producto 10',
         img: 'https://picsum.photos/200/300',
         price: 29.99
     }

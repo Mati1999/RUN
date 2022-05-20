@@ -1,4 +1,4 @@
-import { StyleSheet,Text,View,TextInput,TouchableOpacity } from 'react-native'
+import { StyleSheet,Text,View,TextInput,TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,Platform,Keyboard } from 'react-native'
 import React,{ useState,useEffect } from 'react'
 import Header from '../Components/Header'
 import Searcher from '../Components/Searcher'
@@ -7,7 +7,7 @@ import { PRODUCTS } from '../Data/products';
 import { colors } from '../Styles/Colors';
 import { Entypo } from '@expo/vector-icons';
 
-const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },handleCategory }) => {
+const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation }) => {
 
     const [input,setInput] = useState('');
     const [initialProducts,setInitialProducts] = useState([]);
@@ -32,41 +32,60 @@ const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },handleCategory }
         setInitialProducts(productsByCategory);
     },[]);
 
+    const handleDetailProduct = () => {
+        navigation.navigate('Detail');
+    }
+
+    const handleBack = () => {
+        navigation.goBack()
+    }
+
     return (
-        <>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.keyboardAvoid}
+            keyboardVerticalOffset={10}
+        >
             <Header title={category.category} />
-            <TouchableOpacity onPress={() => { handleCategory(null) }}>
-                <Text>Volver</Text>
-            </TouchableOpacity>
-            <View style={styles.container}>
-                <Searcher additionalStyles={{
-                    backgroundColor: colors.lightBlue,
-                }}>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            value={input}
-                            onChangeText={setInput}
-                            keyboardType='default'
-                            style={styles.input}
-                            placeholder='Ingrese el producto a buscar'
-                        />
-                        <TouchableOpacity onPress={() => { handleErase() }} style={styles.iconContainer}>
-                            <Entypo name="erase" style={styles.icon} />
-                        </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <Searcher additionalStyles={{
+                        backgroundColor: colors.lightBlue,
+                    }}>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                value={input}
+                                onChangeText={setInput}
+                                keyboardType='default'
+                                style={styles.input}
+                                placeholder='Ingrese el producto a buscar'
+                            />
+                            <TouchableOpacity onPress={() => { handleErase() }} style={styles.iconContainer}>
+                                <Entypo name="erase" style={styles.icon} />
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.searchTypeText}>Buscar Categoría</Text>
+                    </Searcher>
+                    <View style={styles.listContainer}>
+                        <List data={productsFiltered} itemType='Producto' onPress={handleDetailProduct} />
                     </View>
-                    <Text style={styles.searchTypeText}>Buscar Categoría</Text>
-                </Searcher>
-                <View style={styles.listContainer}>
-                    <List data={productsFiltered} itemType='Producto' />
                 </View>
-            </View>
-        </>
+            </TouchableWithoutFeedback>
+            <TouchableOpacity style={styles.goBack} onPress={handleBack}>
+                <Text style={styles.goBackText}>Volver</Text>
+            </TouchableOpacity>
+        </KeyboardAvoidingView>
     )
 }
 
 export default ProductsScreen
 
-const styles = StyleSheet.create({
+const styles = {
+    keyboardAvoid: {
+        width: '100%',
+        alignItems: 'center',
+        flex: 1,
+    },
     container: {
         flex: 1,
         width: '100%',
@@ -75,6 +94,9 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flexDirection: 'row',
+    },
+    listContainer: {
+        height: '70%',
     },
     input: {
         width: '78%',
@@ -102,5 +124,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         lineHeight: 50,
         fontSize: 20,
+    },
+    goBack: {
+        marginTop: 20,
+        marginBottom: 20,
+        backgroundColor: colors.lightBlue,
+        width: 300,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+    },
+    goBackText: {
+        fontSize: 20,
     }
-})
+}

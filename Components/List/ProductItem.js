@@ -13,7 +13,7 @@ const ProductItem = ({ product }) => {
 
 export default ProductItem
 
-const styles = StyleSheet.create({
+const styles = {
     container: {
         width: '100%',
         backgroundColor: colors.lightBlue,
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: colors.darkBlue
     }
-})
+}

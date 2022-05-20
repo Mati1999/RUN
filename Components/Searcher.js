@@ -12,7 +12,7 @@ const Searcher = ({ children,additionalStyles }) => {
 
 export default Searcher
 
-const styles = StyleSheet.create({
+const styles = {
     searcherContainer: {
         padding: 10,
         width: '90%',
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
         elevation: 6,
         borderRadius: 10,
     }
-})
+}
