@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { StyleSheet,Text,View,ActivityIndicator } from 'react-native';
-import CategoriesScreens from './Screens/CategoriesScreen';
-import ProductsScreen from './Screens/ProductsScreen';
+// import { useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+// import CategoriesScreens from './Screens/CategoriesScreen';
+// import ProductsScreen from './Screens/ProductsScreen';
 import { useFonts } from 'expo-font';
-import DetailScreen from './Screens/DetailScreen';
+// import DetailScreen from './Screens/DetailScreen';
 import { SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context';
-import MainNavigator from './Navigation/Shop';
+import MainNavigator from './Navigation';
 
 export default function App() {
 

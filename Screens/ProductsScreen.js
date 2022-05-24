@@ -1,17 +1,19 @@
 import { StyleSheet,Text,View,TextInput,TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,Platform,Keyboard } from 'react-native'
 import React,{ useState,useEffect } from 'react'
-import Header from '../Components/Header'
 import Searcher from '../Components/Searcher'
 import List from '../Components/List';
 import { PRODUCTS } from '../Data/products';
 import { colors } from '../Styles/Colors';
 import { Entypo } from '@expo/vector-icons';
 
-const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation }) => {
+const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation,route }) => {
 
     const [input,setInput] = useState('');
     const [initialProducts,setInitialProducts] = useState([]);
     const [productsFiltered,setproductsFiltered] = useState([]);
+
+
+    const { categoryId } = route.params;
 
     const handleErase = () => {
         setInput('');
@@ -28,12 +30,15 @@ const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation }) =>
     },[input,initialProducts]);
 
     useEffect(() => {
-        const productsByCategory = PRODUCTS.filter(product => product.category === category.id);
+        const productsByCategory = PRODUCTS.filter(product => product.category === categoryId);
         setInitialProducts(productsByCategory);
-    },[]);
+    },[categoryId]);
 
-    const handleDetailProduct = () => {
-        navigation.navigate('Detail');
+    const handleDetailProduct = (product) => {
+        navigation.push('Detail',{
+            productId: product.id,
+            productTitle: product.description,
+        });
     }
 
     const handleBack = () => {
@@ -46,7 +51,6 @@ const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation }) =>
             style={styles.keyboardAvoid}
             keyboardVerticalOffset={10}
         >
-            <Header title={category.category} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <Searcher additionalStyles={{

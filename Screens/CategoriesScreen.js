@@ -1,6 +1,5 @@
 import { StyleSheet,Text,View,TextInput,TouchableOpacity } from 'react-native'
 import React,{ useState,useEffect } from 'react'
-import Header from '../Components/Header'
 import Searcher from '../Components/Searcher';
 import { colors } from '../Styles/Colors';
 import List from '../Components/List';
@@ -26,12 +25,14 @@ const CategoriesScreen = ({ navigation }) => {
 
     const handleSelectedCategory = (category) => {
         // handleCategory(category);
-        navigation.navigate('Products');
+        navigation.push('Products',{
+            categoryId: category.id,
+            categoryTitle: category.category,
+        });
     }
 
     return (
         <>
-            <Header />
             <View style={styles.container}>
                 <Searcher additionalStyles={{
                     backgroundColor: colors.lightBlue,

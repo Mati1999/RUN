@@ -1,25 +1,32 @@
 import { StyleSheet,Text,View,Image,useWindowDimensions,TouchableOpacity } from 'react-native'
 import React,{ useState,useEffect } from 'react'
-import Header from '../Components/Header';
 import { colors } from '../Styles/Colors';
+import { PRODUCTS } from '../Data/products';
 
-const DetailScreen = ({ product = { id: 8,category: 4,description: 'Producto 8',img: 'https://picsum.photos/200/300',price: 29.99 },navigation }) => {
+const DetailScreen = ({ route,navigation }) => {
 
     const { width,height } = useWindowDimensions();
+    const [product,setProduct] = useState(null);
     const [orientation,setOrientation] = useState('');
+
+    const { productId } = route.params;
 
 
     useEffect(() => {
         setOrientation(width > height ? 'landscape' : 'portrait')
     },[width,height]);
 
+    useEffect(() => {
+        const productSelected = PRODUCTS.filter(product => product.id === productId);
+        setProduct(productSelected[0]);
+    },[productId]);
+
     const handleBack = () => {
         navigation.goBack()
     }
 
     return (
-        <>
-            <Header title={product.description} />
+        product && (
             <View style={orientation === 'portrait' ? styles.containerVertical : styles.containerHorizontal}>
                 <Image
                     source={{ uri: product.img }}
@@ -37,7 +44,8 @@ const DetailScreen = ({ product = { id: 8,category: 4,description: 'Producto 8',
                     <Text style={styles.goBackText}>Volver</Text>
                 </TouchableOpacity>
             </View>
-        </>
+        )
+
     )
 }
 
