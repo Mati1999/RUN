@@ -2,34 +2,27 @@ import { StyleSheet,Text,View,Image,useWindowDimensions,TouchableOpacity } from 
 import React,{ useState,useEffect } from 'react'
 import { colors } from '../Styles/Colors';
 import { PRODUCTS } from '../Data/products';
+import { useSelector } from 'react-redux';
 
 const DetailScreen = ({ route,navigation }) => {
 
     const { width,height } = useWindowDimensions();
-    const [product,setProduct] = useState(null);
     const [orientation,setOrientation] = useState('');
-
-    const { productId } = route.params;
-
+    const { productSelected } = useSelector(state => state.products.value)
 
     useEffect(() => {
         setOrientation(width > height ? 'landscape' : 'portrait')
     },[width,height]);
-
-    useEffect(() => {
-        const productSelected = PRODUCTS.filter(product => product.id === productId);
-        setProduct(productSelected[0]);
-    },[productId]);
 
     const handleBack = () => {
         navigation.goBack()
     }
 
     return (
-        product && (
+        productSelected && (
             <View style={orientation === 'portrait' ? styles.containerVertical : styles.containerHorizontal}>
                 <Image
-                    source={{ uri: product.img }}
+                    source={{ uri: productSelected.img }}
                     style={{
                         ...styles.image,
                         maxWidth: width * 0.8,
@@ -37,8 +30,8 @@ const DetailScreen = ({ route,navigation }) => {
                         resizeMode: 'cover',
                     }}
                 />
-                <Text>{product.description}</Text>
-                <Text>$ {product.price}</Text>
+                <Text>{productSelected.description}</Text>
+                <Text>$ {productSelected.price}</Text>
 
                 <TouchableOpacity style={styles.goBack} onPress={handleBack}>
                     <Text style={styles.goBackText}>Volver</Text>

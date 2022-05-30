@@ -3,16 +3,19 @@ import React,{ useState,useEffect } from 'react'
 import Searcher from '../Components/Searcher';
 import { colors } from '../Styles/Colors';
 import List from '../Components/List';
-import { CATEGORIES } from '../Data/categories';
 import { Entypo } from '@expo/vector-icons';
-
+import { useDispatch,useSelector } from 'react-redux';
+import { selectCategory } from '../Features/categories';
+import { setProductsByCategory } from '../Features/products';
 const CategoriesScreen = ({ navigation }) => {
 
     const [input,setInput] = useState('');
-    const [categoriesFilter,setCategoriesFilter] = useState(CATEGORIES);
+    const [categoriesFilter,setCategoriesFilter] = useState();
+    const { categories } = useSelector(state => state.categories.value);
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (input === '') setCategoriesFilter(CATEGORIES);
+        if (input === '') setCategoriesFilter(categories);
         else {
             let categorySelected = categoriesFilter.filter(category => category.category.toLowerCase().includes(input.toLowerCase()));
             setCategoriesFilter(categorySelected);
@@ -25,6 +28,8 @@ const CategoriesScreen = ({ navigation }) => {
 
     const handleSelectedCategory = (category) => {
         // handleCategory(category);
+        dispatch(setProductsByCategory(category.id))
+        dispatch(selectCategory(category.id));
         navigation.push('Products',{
             categoryId: category.id,
             categoryTitle: category.category,

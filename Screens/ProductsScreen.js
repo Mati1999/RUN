@@ -2,39 +2,42 @@ import { StyleSheet,Text,View,TextInput,TouchableOpacity,KeyboardAvoidingView,To
 import React,{ useState,useEffect } from 'react'
 import Searcher from '../Components/Searcher'
 import List from '../Components/List';
-import { PRODUCTS } from '../Data/products';
 import { colors } from '../Styles/Colors';
 import { Entypo } from '@expo/vector-icons';
+import { useDispatch,useSelector } from 'react-redux';
+import { setProductSelected } from '../Features/products';
 
 const ProductsScreen = ({ category = { id: 1,category: 'Ropa' },navigation,route }) => {
 
     const [input,setInput] = useState('');
     const [initialProducts,setInitialProducts] = useState([]);
     const [productsFiltered,setproductsFiltered] = useState([]);
-
-
+    const { products } = useSelector(state => state.products.value);
     const { categoryId } = route.params;
+    const { productsByCategory } = useSelector(state => state.products.value);
+    const dispatch = useDispatch();
 
     const handleErase = () => {
         setInput('');
     }
 
     useEffect(() => {
-        if (initialProducts.length !== 0) {
-            if (input === '') setproductsFiltered(initialProducts);
+        if (productsByCategory.length !== 0) {
+            if (input === '') setproductsFiltered(productsByCategory);
             else {
-                let productSelected = initialProducts.filter(product => product.description.toLowerCase().includes(input.toLowerCase()));
+                let productSelected = productsByCategory.filter(product => product.description.toLowerCase().includes(input.toLowerCase()));
                 setproductsFiltered(productSelected);
             }
         }
-    },[input,initialProducts]);
+    },[input,productsByCategory]);
 
-    useEffect(() => {
-        const productsByCategory = PRODUCTS.filter(product => product.category === categoryId);
-        setInitialProducts(productsByCategory);
-    },[categoryId]);
+    // useEffect(() => {
+    //     const productsByCategory = products.filter(product => product.category === categoryId);
+    //     setInitialProducts(productsByCategory);
+    // },[categoryId]);
 
     const handleDetailProduct = (product) => {
+        dispatch(setProductSelected(product.id));
         navigation.push('Detail',{
             productId: product.id,
             productTitle: product.description,
