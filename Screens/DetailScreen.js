@@ -2,13 +2,16 @@ import { StyleSheet,Text,View,Image,useWindowDimensions,TouchableOpacity } from 
 import React,{ useState,useEffect } from 'react'
 import { colors } from '../Styles/Colors';
 import { PRODUCTS } from '../Data/products';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+import { addItem } from '../Features/cart';
 
 const DetailScreen = ({ route,navigation }) => {
 
     const { width,height } = useWindowDimensions();
     const [orientation,setOrientation] = useState('');
     const { productSelected } = useSelector(state => state.products.value)
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         setOrientation(width > height ? 'landscape' : 'portrait')
@@ -16,6 +19,10 @@ const DetailScreen = ({ route,navigation }) => {
 
     const handleBack = () => {
         navigation.goBack()
+    }
+
+    const handleAdd = (id) => {
+        dispatch(addItem({ id: id }))
     }
 
     return (
@@ -35,6 +42,9 @@ const DetailScreen = ({ route,navigation }) => {
 
                 <TouchableOpacity style={styles.goBack} onPress={handleBack}>
                     <Text style={styles.goBackText}>Volver</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleAdd(productSelected.id)}>
+                    <Text>Agregar al carrito</Text>
                 </TouchableOpacity>
             </View>
         )
