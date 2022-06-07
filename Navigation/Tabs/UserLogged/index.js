@@ -9,6 +9,8 @@ import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import OrderScreen from '../../../Screens/OrderScreen';
+import LocationStack from '../../Stacks/Locations';
+import { Ionicons } from '@expo/vector-icons';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -60,6 +62,20 @@ const TabNavigatorLogged = () => {
                             <View style={styles.item}>
                                 <Feather name="list" size={24} color="black" />
                                 <Text>Ordenes</Text>
+                            </View>
+                        )
+                    }
+                }}
+            />
+            <BottomTabs.Screen
+                name='LocationTab'
+                component={LocationStack}
+                options={{
+                    tabBarIcon: ({ focused }) => {
+                        return (
+                            <View style={styles.item}>
+                                <Ionicons name="add-circle-outline" size={24} color="black" />
+                                <Text>Direcciones</Text>
                             </View>
                         )
                     }

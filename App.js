@@ -11,19 +11,6 @@ import { Provider } from 'react-redux'
 
 export default function App() {
 
-  // const [categorySelected,setCategorySelected] = useState(null);
-  // const [productSelected,setProductSelected] = useState(null);
-
-  // const handleCategory = (category) => {
-  //   setCategorySelected(category);
-  // }
-
-  // const handleProduct = (product) => {
-  //   setProductSelected(product);
-  // }
-
-  //FONTS
-
   const [loaded] = useFonts({
     LatoRegular: require('./assets/Fonts/Roboto-Regular.ttf'),
   });

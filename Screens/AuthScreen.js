@@ -1,87 +1,120 @@
-import { StyleSheet,Text,View,TouchableOpacity } from 'react-native'
-import React,{ useState } from 'react'
+import { Button,StyleSheet,Text,TouchableOpacity,View } from 'react-native'
+import React,{ useState } from 'react';
+import Input from '../Components/Input'
+import loginValidationSchema from '../Utils/validationYup'
+import { Formik } from 'formik';
 import { colors } from '../Styles/Colors';
-import Input from '../Components/Input';
 import { useDispatch } from 'react-redux';
-import { signUp,SignIn } from '../Features/auth';
-import { schemaEmail,schemaPassword } from '../Utils/validateSchemas';
-
-
-
+import { SignIn,signUp } from '../Features/auth';
 const LoginScreen = () => {
 
-    const [registroVista,setRegistroVista] = useState(false);
-    const [email,setEmail] = useState('');
-    const [password,setPasword] = useState('');
-    const [confirmPasword,setConfirmPasword] = useState('');
-    const [emailError,setEmailError] = useState('');
-    const [passwordError,setPasswordError] = useState('');
-    const [confirmPasswordError,setConfirmPasswordError] = useState('');
-    const [signIn,setSignIn] = useState(false);
+    const [registroVista,setRegistroVista] = useState(false)
+    // const [email, setEmail] = useState("");
+    // const [emailError, setEmailError] = useState("");
+    // const [password, setPassword] = useState("");
+    // const [passwordError, setPasswordError] = useState("")
+    // const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError,setConfirmPasswordError] = useState("");
+
     const dispatch = useDispatch()
 
-    const handleSignUp = () => {
+    const handleSignup = () => {
 
-        const validateEmail = schemaEmail.validate({ email: email })
+        /* const validateEmail = schemaEmail.validate({ email: email })
         const validatePassword = schemaPassword.validate({ password: password })
-
+        console.log(validateEmail);
+        console.log(validatePassword)
         if (validateEmail.error) setEmailError(validateEmail.error.message)
-        else setEmailError('')
-        if (validatePassword.error) setPasswordError(validatePassword.error.message)
-        else setPasswordError('')
-        if (validatePassword.error) setConfirmPasswordError(validatePassword.error.message)
-        else setConfirmPasswordError('')
-
-        if (password === confirmPasword && emailError === '' && passwordError === '' && confirmPasswordError === '') {
-            console.log('Registrado');
+        else if (validatePassword.error) setPasswordError(validatePassword.error.message)
+        else { */
+        setEmailError("")
+        setPasswordError("")
+        if (password === confirmPassword) {
+            console.log("Se registra!");
             dispatch(signUp({ email: email,password: password }))
+        } else {
+            setConfirmPasswordError("Los passwords deben coincidir")
         }
     }
 
-    const handleSignIn = () => {
+    // }
 
-        const validateEmail = schemaEmail.validate({ email: email })
+    const handleLogin = () => {
+
+        const validateEmailAndPassword = loginValidationSchema.validate({ email,password })
+        console.log(validateEmailAndPassword);
+
+        /* const validateEmail = schemaEmail.validate({ email: email })
         const validatePassword = schemaPassword.validate({ password: password })
-
         if (validateEmail.error) setEmailError(validateEmail.error.message)
-        else setEmailError('')
-        if (validatePassword.error) setPasswordError(validatePassword.error.message)
-        else setPasswordError('')
+        else if (validatePassword.error) setPasswordError(validatePassword.error.message)
+        else {
+            setEmailError("");
+            setPasswordError("");
+            console.log("Se registra!");
+            dispatch(login({ email: email, password: password }));
+        } */
+    }
 
-        if (emailError === '' && passwordError === '') {
-            console.log('Sesión Iniciada');
-            dispatch(SignIn({ email: email,password: password }))
+    const handleSubmit = (values) => {
+        console.log(values);
+        console.log("Se submiteo un form válido");
+        if (registroVista) {
+            if (values.password === values.confirmPassword) {
+                console.log("Se registra!");
+                dispatch(SignIn({ email: values.email,password: values.password }))
+            } else {
+                setConfirmPasswordError("Los passwords deben coincidir")
+            }
+        }
+        else {
+            console.log("Entra al login");
+            dispatch(SignIn({ email: values.email,password: values.password }));
         }
     }
 
     return (
         <View style={styles.container}>
-            {!signIn ?
-                <View style={styles.content}>
-                    <Text style={styles.title}>SignUp</Text>
-                    <Input label='Email' password={false} onChange={setEmail} value={email} error={emailError} />
-                    <Input label='Password' password={true} onChange={setPasword} value={password} error={passwordError} />
-                    <Input label='Confirm password' password={true} onChange={setConfirmPasword} value={confirmPasword} error={confirmPasswordError} />
-                    <TouchableOpacity>
-                        <Text onPress={handleSignUp}>SignUp</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text onPress={() => setSignIn(true)}>I want to SingIn</Text>
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={styles.content}>
-                    <Text style={styles.title}>SignIn</Text>
-                    <Input label='Email' password={false} onChange={setEmail} value={email} error={emailError} />
-                    <Input label='Password' password={true} onChange={setPasword} value={password} error={passwordError} />
-                    <TouchableOpacity>
-                        <Text onPress={handleSignIn}>SignIn</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text onPress={() => setSignIn(false)}>I want to SingUp</Text>
-                    </TouchableOpacity>
-                </View>
-            }
+            <View style={styles.content}>
+                <Text style={styles.title}>{registroVista ? "Registro" : "Login"}</Text>
+                <Formik
+                    onSubmit={handleSubmit}
+                    initialValues={{ email: "",password: "",confirmPassword: "" }}
+                    validationSchema={loginValidationSchema}
+                    validateOnChange={false}
+                    validateOnBlur={false}
+                >
+                    {({ handleChange,errors,handleSubmit,values,handleBlur }) => (
+                        <>
+                            <Input label="Email" password={false} onChange={handleChange('email')} value={values.email} error={errors.email} onBlur={handleBlur('email')} />
+                            <Input label="Password" password={true} onChange={handleChange('password')} value={values.password} error={errors.password} onBlur={handleBlur('password')} />
+                            {registroVista && <Input label="Confirm password" password={true} onChange={handleChange('confirmPassword')} value={values.confirmPassword} onBlur={handleBlur('confirmPassword')} error={confirmPasswordError} />}
+                            {registroVista ?
+                                <Button title="Signup" onPress={handleSubmit} />
+                                :
+                                <Button title="Login" onPress={handleSubmit} />
+                            }
+                            <View style={styles.textContainer}>
+                                {registroVista ?
+                                    <TouchableOpacity onPress={() => setRegistroVista(false)}>
+                                        <Text>¿Ya tienes cuenta? <Text
+                                            style={styles.link}
+                                        >Login</Text></Text>
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity onPress={() => setRegistroVista(true)}
+                                    >
+                                        <Text>¿No tienes cuenta? <Text
+                                            style={styles.link}
+                                        >¡Crea una!</Text></Text>
+                                    </TouchableOpacity>
+                                }
+                            </View>
+                        </>
+                    )}
+                </Formik>
+
+            </View>
         </View>
     )
 }
@@ -96,8 +129,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.beige
     },
     content: {
-        width: '80%',
-        height: '50%',
         backgroundColor: colors.darkBlue,
         padding: 20,
         justifyContent: 'center',
@@ -116,5 +147,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center'
     },
-
+    textContainer: {
+        padding: 10,
+        fontFamily: 'LatoRegular',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    link: {
+        color: colors.lightBlue,
+        textDecorationLine: "underline"
+    }
 })
