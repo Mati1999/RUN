@@ -27,7 +27,6 @@ export const signUp = createAsyncThunk(
                 })
             });
             const data = await res.json();
-            console.log(data);
             return data
         } catch (error) {
             return isRejectedWithValue(error);
@@ -47,8 +46,7 @@ export const SignIn = createAsyncThunk(
                     returnSecureToken: true
                 })
             });
-            const data = await res.json();
-            console.log(data);
+            const data = await res.json();;
             return data
         } catch (error) {
             return isRejectedWithValue(error);

@@ -2,7 +2,6 @@ import { StyleSheet,Text,View } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ShopNavigator from '../../Stacks/Shop';
-import CartStack from '../../Stacks/Cart';
 import CartScreen from '../../../Screens/CartScreen';
 import { colors } from '../../../Styles/Colors';
 import { Entypo } from '@expo/vector-icons';
@@ -10,7 +9,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import OrderScreen from '../../../Screens/OrderScreen';
 import LocationStack from '../../Stacks/Locations';
-import { Ionicons } from '@expo/vector-icons';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -74,7 +72,7 @@ const TabNavigatorLogged = () => {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={styles.item}>
-                                <Ionicons name="add-circle-outline" size={24} color="black" />
+                                <Entypo name="location" size={24} color="black" />
                                 <Text>Direcciones</Text>
                             </View>
                         )
