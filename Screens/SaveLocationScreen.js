@@ -3,8 +3,8 @@ import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import renamePathAndMove from '../Utils/renamePath';
 import { useDispatch } from 'react-redux';
-import { addLocation } from '../Features/locations'
 import { colors } from '../Styles/Colors';
+import { addLocation,addLocationDb } from '../Features/locations';
 
 
 const SaveLocationScreen = ({ navigation,route }) => {
@@ -62,17 +62,19 @@ const SaveLocationScreen = ({ navigation,route }) => {
     const handleConfirm = async () => {
         // const path = await renamePathAndMove(picture);
         // console.log(path);
-        dispatch(addLocation({ title,picture,id: Date.now(),address: params?.address }))
+        let id = Date.now()
+        dispatch(addLocation({ title,picture,id,address: params?.address }))
+        dispatch(addLocationDb({ title,picture,id,address: params?.address }))
         setTitle("");
         setPicture("");
     }
 
-    const handleLocation = () => {
-        navigation.navigate("Get-location")
+    const handleSetLocation = () => {
+        navigation.navigate("Set-location");
     }
 
-    const handleSetLocation = () => {
-        navigation.navigate("Set-location")
+    const handleLocation = () => {
+        navigation.navigate("Get-location")
     }
 
     return (
@@ -93,7 +95,7 @@ const SaveLocationScreen = ({ navigation,route }) => {
             <Button title='Tomar una foto' onPress={handleTakePicture} />
             <Button title="Seleccionar de la galería" onPress={handlePickLibrary} />
             <Button title="Obtener ubicación" onPress={handleLocation} />
-            <Button title="Definir una ubicación" onPress={handleSetLocation}></Button>
+            <Button title="Definir una ubicación" onPress={handleSetLocation} />
             <Button title="Confirmar" onPress={handleConfirm}></Button>
         </View>
     )

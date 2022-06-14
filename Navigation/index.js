@@ -8,14 +8,14 @@ import { useSelector } from 'react-redux'
 const MainNavigator = () => {
 
     const { user } = useSelector(state => state.auth.value)
-    console.log(user);
 
     return (
         <NavigationContainer>
-            {true ?
-                <TabNavigatorLogged />
-                :
+            {/* Sacá el ! de usar.email */}
+            {!user.email === '' ?
                 <AuthStack />
+                :
+                <TabNavigatorLogged />
             }
         </NavigationContainer>
     )

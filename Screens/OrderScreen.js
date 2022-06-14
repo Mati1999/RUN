@@ -6,7 +6,7 @@ import { useDispatch,useSelector } from 'react-redux'
 import { getOrders } from '../Features/orders'
 
 const renderItem = (data) => (
-    <OrderItem item={data.item} />
+    <OrderItem id={data.id} item={data.item} />
 )
 
 
@@ -25,7 +25,7 @@ const OrderScreen = () => {
         <View>
             <FlatList
                 data={orders}
-                keyExtractor={item => item.id}
+                keyExtractor={(item,index) => index}
                 renderItem={renderItem}
             />
         </View>

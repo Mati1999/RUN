@@ -1,19 +1,20 @@
-// import { useState } from 'react';
 import { ActivityIndicator } from 'react-native';
-// import CategoriesScreens from './Screens/CategoriesScreen';
-// import ProductsScreen from './Screens/ProductsScreen';
 import { useFonts } from 'expo-font';
-// import DetailScreen from './Screens/DetailScreen';
 import { SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context';
 import MainNavigator from './Navigation';
 import Store from './Store';
 import { Provider } from 'react-redux'
+import { init } from './db';
 
 export default function App() {
 
   const [loaded] = useFonts({
     LatoRegular: require('./assets/Fonts/Roboto-Regular.ttf'),
   });
+
+  init()
+    .then(() => { console.log('DB initialized') })
+    .catch(error => { console.log(error.message) })
 
   if (!loaded) {
     return <ActivityIndicator />;

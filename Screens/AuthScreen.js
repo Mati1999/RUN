@@ -5,56 +5,13 @@ import loginValidationSchema from '../Utils/validationYup'
 import { Formik } from 'formik';
 import { colors } from '../Styles/Colors';
 import { useDispatch } from 'react-redux';
-import { SignIn,signUp } from '../Features/auth';
+import { SignIn } from '../Features/auth';
 const LoginScreen = () => {
 
     const [registroVista,setRegistroVista] = useState(false)
-    // const [email, setEmail] = useState("");
-    // const [emailError, setEmailError] = useState("");
-    // const [password, setPassword] = useState("");
-    // const [passwordError, setPasswordError] = useState("")
-    // const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordError,setConfirmPasswordError] = useState("");
 
     const dispatch = useDispatch()
-
-    const handleSignup = () => {
-
-        /* const validateEmail = schemaEmail.validate({ email: email })
-        const validatePassword = schemaPassword.validate({ password: password })
-        console.log(validateEmail);
-        console.log(validatePassword)
-        if (validateEmail.error) setEmailError(validateEmail.error.message)
-        else if (validatePassword.error) setPasswordError(validatePassword.error.message)
-        else { */
-        setEmailError("")
-        setPasswordError("")
-        if (password === confirmPassword) {
-            console.log("Se registra!");
-            dispatch(signUp({ email: email,password: password }))
-        } else {
-            setConfirmPasswordError("Los passwords deben coincidir")
-        }
-    }
-
-    // }
-
-    const handleLogin = () => {
-
-        const validateEmailAndPassword = loginValidationSchema.validate({ email,password })
-        console.log(validateEmailAndPassword);
-
-        /* const validateEmail = schemaEmail.validate({ email: email })
-        const validatePassword = schemaPassword.validate({ password: password })
-        if (validateEmail.error) setEmailError(validateEmail.error.message)
-        else if (validatePassword.error) setPasswordError(validatePassword.error.message)
-        else {
-            setEmailError("");
-            setPasswordError("");
-            console.log("Se registra!");
-            dispatch(login({ email: email, password: password }));
-        } */
-    }
 
     const handleSubmit = (values) => {
         console.log(values);
@@ -89,6 +46,7 @@ const LoginScreen = () => {
                             <Input label="Email" password={false} onChange={handleChange('email')} value={values.email} error={errors.email} onBlur={handleBlur('email')} />
                             <Input label="Password" password={true} onChange={handleChange('password')} value={values.password} error={errors.password} onBlur={handleBlur('password')} />
                             {registroVista && <Input label="Confirm password" password={true} onChange={handleChange('confirmPassword')} value={values.confirmPassword} onBlur={handleBlur('confirmPassword')} error={confirmPasswordError} />}
+
                             {registroVista ?
                                 <Button title="Signup" onPress={handleSubmit} />
                                 :

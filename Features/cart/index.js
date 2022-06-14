@@ -55,7 +55,10 @@ const cartSlice = createSlice({
                 state.value.cart.push({ ...producto,quantity: 1 });
             }
         },
-        removeItem: () => { }
+        removeItem: (state,action) => {
+            const cartSinProd = state.value.cart.filter(producto => producto.id !== action.payload.id);
+            state.value.cart = cartSinProd;
+        }
     },
     extraReducers: {
         [confirmPurchase.pending]: (state) => {
